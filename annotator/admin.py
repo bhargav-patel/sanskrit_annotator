@@ -13,7 +13,7 @@ class WordAdmin(admin.ModelAdmin):
     list_filter = ['POS','dep']
 
 class WordOptionAdmin(admin.ModelAdmin):
-    list_display = ("id","word","lemma","morph","level","color_class","position","chunk_no","pre_verb","colspan","wordlength","aux_info","sandhi_indexs","sandhi_words")
+    list_display = ("id","word","lemma","morph","level","color_class","isEliminated","isSelected","position","chunk_no","pre_verb","colspan","wordlength","aux_info","sandhi_indexs","sandhi_words")
     search_fields = ['word__text',"color_class","lemma","pre_verb","morph","aux_info","sandhi_words"]
     list_filter = ["color_class","morph","level"]
 

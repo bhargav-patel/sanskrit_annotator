@@ -50,15 +50,30 @@
 						</div>
 					</div>
 					<div class="panel-body">
-						<h3>
-							{% for w in word_current.sent.word_set.all %}
-									{% if w.id is word_current.id %}
-										<u><a href="#">{{w.text}}</a></u>
-									{% else %}
-										<a href="{% url 'change_word' w.id %}">{{w.text}}</a>
-									{% endif %}
-							{% endfor %}
-						</h3>
+						<div class="row">
+							<div class="col-md-8">
+								<h3>
+									{% for w in word_current.sent.word_set.all %}
+											{% if w.id is word_current.id %}
+												<u><a href="#">{{w.text}}</a></u>
+											{% else %}
+												<a href="{% url 'change_word' w.id %}">{{w.text}}</a>
+											{% endif %}
+									{% endfor %}
+								</h3>
+							</div>
+							<div class="col-md-4">
+								<h3>
+									<a class="btn btn-info btn-sm" target="_blank" href="http://sanskrit.inria.fr/cgi-bin/SKT/sktgraph?lex=SH&st=t&us=f&cp=t&text=
+
+									{% for w in word_current.sent.word_set.all %}
+										{{w.text}}+
+									{% endfor %}
+
+									&t=WX&topic=&mode=g&corpmode=&corpdir=&sentno=">Sanskrit Segmenter</a>
+								</h3>
+							</div>
+						</div>
 					</div>
 					<div class="panel-footer">
 						<div class="row">
@@ -189,7 +204,9 @@
 										{% for c in word_childs %}
 											<div class="panel panel-primary">
 												<div class="panel-heading">
-													<h3 class="panel-title">Word : {{c.text}}</h3>
+													<h3 class="panel-title">Word : 
+														<a href="{% url 'change_word' c.id %}">{{c.text}}</a>
+													</h3>
 												</div>
 												<div class="panel-body">
 													<ul class="list-group">
