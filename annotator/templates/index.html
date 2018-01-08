@@ -1,0 +1,244 @@
+
+{% load bootstrap3 %}
+
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sanskrit Annotator</title>
+	<meta charset="utf-8">
+	{% bootstrap_css %}
+	{% bootstrap_javascript %}
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Shortlist</h3>
+					</div>
+					<div class="panel-body">
+						<form method="POST" class="post-form">
+							{% csrf_token %}
+					        {% bootstrap_form form layout='inline'%}
+					        <button type="submit" class="save btn btn-primary">Go</button>
+					    </form>
+					</div>
+					<div class="panel-footer">
+						<ul class="list-group">
+							{% for word in words %}
+								<li class="list-group-item">
+									<a href="{% url 'change_word' word.id %}">{{word.text}}</a>
+								</li>	    
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-10">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-md-4">
+								<h4 class="panel-title">Sentence {{word_current.sent_id}} </h4>
+							</div>
+							<div class="col-md-4"></div>
+							<div class="col-md-4">
+								<h3 class="panel-title">Status : {{numDone}} / {{numTotal}} Words</h3>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<h3>
+							{% for w in word_current.sent.word_set.all %}
+									{% if w.id is word_current.id %}
+										<u><a href="#">{{w.text}}</a></u>
+									{% else %}
+										<a href="{% url 'change_word' w.id %}">{{w.text}}</a>
+									{% endif %}
+							{% endfor %}
+						</h3>
+					</div>
+					<div class="panel-footer">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<h3 class="panel-title">Parent : 
+											{% if word_parent %}
+												<a href="{% url 'change_word' word_parent.id %}">{{word_parent.text}}</a>
+											{% else %}
+												None
+											{% endif %}
+									</div>
+									<div class="panel-body">
+										{% if word_parent %}
+											<ul class="list-group">
+											<li class="list-group-item">POS : {{word_parent.POS}}</li>
+											<li class="list-group-item">dep : {{word_parent.dep}}</li>
+										</ul>
+										{% endif %}
+									</div>
+									<div class="panel-footer">
+										{% if word_parent %}
+											<ul class="list-group">
+												{% for wo in word_parent.wordoption_set.all %}
+													{% if not wo.isEliminated %}
+														<li class="list-group-item">
+															<table class="table table-striped">
+																<tr>
+																	<td>lemma</td>
+																	<td>{{wo.lemma}}</td>
+																</tr>
+																<tr>
+																	<td>morph</td>
+																	<td>{{wo.morph}}</td>
+																</tr>
+																<!-- <tr>
+																	<td>aux_info</td>
+																	<td>{{wo.aux_info}}</td>
+																</tr>		
+																<tr>
+																	<td>color_class</td>
+																	<td>{{wo.color_class}}</td>
+																</tr> -->
+															</table>
+															{% if not wo.isSelected %}
+																<a class="btn btn-success" href="{% url 'select_wordoption' wo.id %}">Select</a>
+																<a class="btn btn-danger" href="{% url 'eliminate_wordoption' wo.id %}">Eliminate</a>
+															{% endif %}
+														</li>
+													{% endif %}
+												{% endfor %}
+											</ul>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<h3 class="panel-title">Word : {{word_current.text}}</h3>
+									</div>
+									<div class="panel-body">
+										<ul class="list-group">
+											<li class="list-group-item">POS : {{word_current.POS}}</li>
+											<li class="list-group-item">dep : {{word_current.dep}}</li>
+										</ul>
+									</div>
+									<div class="panel-footer">
+										<ul class="list-group">
+											{% for wo in word_current.wordoption_set.all %}
+												{% if not wo.isEliminated %}
+													<li class="list-group-item">
+														<table class="table table-striped">
+															<tr>
+																<td>lemma</td>
+																<td>{{wo.lemma}}</td>
+															</tr>
+															<tr>
+																<td>morph</td>
+																<td>{{wo.morph}}</td>
+															</tr>
+															<!-- <tr>
+																<td>aux_info</td>
+																<td>{{wo.aux_info}}</td>
+															</tr>		
+															<tr>
+																<td>color_class</td>
+																<td>{{wo.color_class}}</td>
+															</tr> -->
+														</table>
+														{% if not wo.isSelected %}
+															<a class="btn btn-success" href="{% url 'select_wordoption' wo.id %}">Select</a>
+															<a class="btn btn-danger" href="{% url 'eliminate_wordoption' wo.id %}">Eliminate</a>
+														{% endif %}
+													</li>
+												{% endif %}
+											{% endfor %}
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<h3 class="panel-title">Childs : {{word_childs.count}}</h3>
+									</div>
+									<!-- <div class="panel-body">
+										<ul class="list-group">
+											{% for c in word_childs %}
+												<li class="list-group-item">
+													<a href="{% url 'change_word' c.id %}">{{c.text}}</a>
+													<table class="table table-striped">
+														<tr>
+															<td>POS</td>
+															<td>{{c.POS}}</td>
+														</tr>
+														<tr>
+															<td>dep</td>
+															<td>{{c.dep}}</td>
+														</tr>
+													</table>
+												</li>	    
+											{% endfor %}
+										</ul>
+									</div> -->
+									<div class="panel-footer">
+										{% for c in word_childs %}
+											<div class="panel panel-primary">
+												<div class="panel-heading">
+													<h3 class="panel-title">Word : {{c.text}}</h3>
+												</div>
+												<div class="panel-body">
+													<ul class="list-group">
+														<li class="list-group-item">POS : {{c.POS}}</li>
+														<li class="list-group-item">dep : {{c.dep}}</li>
+													</ul>
+												</div>
+												<div class="panel-footer">
+													<ul class="list-group">
+														{% for wo in c.wordoption_set.all %}
+															{% if not wo.isEliminated %}
+																<li class="list-group-item">
+																	<table class="table table-striped">
+																		<tr>
+																			<td>lemma</td>
+																			<td>{{wo.lemma}}</td>
+																		</tr>
+																		<tr>
+																			<td>morph</td>
+																			<td>{{wo.morph}}</td>
+																		</tr>
+																		<!-- <tr>
+																			<td>aux_info</td>
+																			<td>{{wo.aux_info}}</td>
+																		</tr>		
+																		<tr>
+																			<td>color_class</td>
+																			<td>{{wo.color_class}}</td>
+																		</tr> -->
+																	</table>
+																	{% if not wo.isSelected %}
+																		<a class="btn btn-success" href="{% url 'select_wordoption' wo.id %}">Select</a>
+																		<a class="btn btn-danger" href="{% url 'eliminate_wordoption' wo.id %}">Eliminate</a>
+																	{% endif %}
+																</li>
+															{% endif %}
+														{% endfor %}
+													</ul>
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
