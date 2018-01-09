@@ -1,0 +1,63 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-8">
+				<h3 class="panel-title">Parent : 
+				{% if word %}
+					<a href="{% url 'change_word' word.id %}">{{word.text}}</a>
+				{% else %}
+					None
+				{% endif %}
+			</div>
+			<div class="col-md-4">
+				{% if word %}
+					<a class="btn btn-info btn-sm" href="{% url 'undo_selections' word.id %}">Reset</a>
+				{% endif %}
+			</div>
+		</div>	
+		
+			
+	</div>
+	<div class="panel-body">
+		{% if word %}
+			<ul class="list-group">
+			<li class="list-group-item">POS : {{word.POS}}</li>
+			<li class="list-group-item">dep : {{word.dep}}</li>
+		</ul>
+		{% endif %}
+	</div>
+	<div class="panel-footer">
+		{% if word %}
+			<ul class="list-group">
+				{% for wo in word.wordoption_set.all %}
+					{% if not wo.isEliminated %}
+						<li class="list-group-item">
+							<table class="table table-striped">
+								<tr>
+									<td>lemma</td>
+									<td>{{wo.lemma}}</td>
+								</tr>
+								<tr>
+									<td>morph</td>
+									<td>{{wo.morph}}</td>
+								</tr>
+								<!-- <tr>
+									<td>aux_info</td>
+									<td>{{wo.aux_info}}</td>
+								</tr>		
+								<tr>
+									<td>color_class</td>
+									<td>{{wo.color_class}}</td>
+								</tr> -->
+							</table>
+							{% if not wo.isSelected %}
+								<a class="btn btn-success" href="{% url 'select_wordoption' wo.id %}">Select</a>
+								<a class="btn btn-danger" href="{% url 'eliminate_wordoption' wo.id %}">Eliminate</a>
+							{% endif %}
+						</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+		{% endif %}
+	</div>
+</div>

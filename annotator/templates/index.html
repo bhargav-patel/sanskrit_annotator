@@ -78,123 +78,10 @@
 					<div class="panel-footer">
 						<div class="row">
 							<div class="col-md-4">
-								<div class="panel panel-primary">
-									<div class="panel-heading">
-										<div class="row">
-											<div class="col-md-8">
-												<h3 class="panel-title">Parent : 
-												{% if word_parent %}
-													<a href="{% url 'change_word' word_parent.id %}">{{word_parent.text}}</a>
-												{% else %}
-													None
-												{% endif %}
-											</div>
-											<div class="col-md-4">
-												{% if word_parent %}
-													<a class="btn btn-info btn-sm" href="{% url 'undo_selections' word_parent.id %}">Reset</a>
-												{% else %}
-													None
-												{% endif %}
-											</div>
-										</div>	
-										
-											
-									</div>
-									<div class="panel-body">
-										{% if word_parent %}
-											<ul class="list-group">
-											<li class="list-group-item">POS : {{word_parent.POS}}</li>
-											<li class="list-group-item">dep : {{word_parent.dep}}</li>
-										</ul>
-										{% endif %}
-									</div>
-									<div class="panel-footer">
-										{% if word_parent %}
-											<ul class="list-group">
-												{% for wo in word_parent.wordoption_set.all %}
-													{% if not wo.isEliminated %}
-														<li class="list-group-item">
-															<table class="table table-striped">
-																<tr>
-																	<td>lemma</td>
-																	<td>{{wo.lemma}}</td>
-																</tr>
-																<tr>
-																	<td>morph</td>
-																	<td>{{wo.morph}}</td>
-																</tr>
-																<!-- <tr>
-																	<td>aux_info</td>
-																	<td>{{wo.aux_info}}</td>
-																</tr>		
-																<tr>
-																	<td>color_class</td>
-																	<td>{{wo.color_class}}</td>
-																</tr> -->
-															</table>
-															{% if not wo.isSelected %}
-																<a class="btn btn-success" href="{% url 'select_wordoption' wo.id %}">Select</a>
-																<a class="btn btn-danger" href="{% url 'eliminate_wordoption' wo.id %}">Eliminate</a>
-															{% endif %}
-														</li>
-													{% endif %}
-												{% endfor %}
-											</ul>
-										{% endif %}
-									</div>
-								</div>
+								{% include "word_panel.html" with word=word_parent %}
 							</div>
 							<div class="col-md-4">
-								<div class="panel panel-primary">
-									<div class="panel-heading">
-										<div class="row">
-											<div class="col-md-8">
-												<h3 class="panel-title">Word : {{word_current.text}}</h3>
-											</div>
-											<div class="col-md-4">
-												<a class="btn btn-info btn-sm" href="{% url 'undo_selections' word_current.id %}">Reset</a>
-											</div>
-										</div>										
-									</div>
-									<div class="panel-body">
-										<ul class="list-group">
-											<li class="list-group-item">POS : {{word_current.POS}}</li>
-											<li class="list-group-item">dep : {{word_current.dep}}</li>
-										</ul>
-									</div>
-									<div class="panel-footer">
-										<ul class="list-group">
-											{% for wo in word_current.wordoption_set.all %}
-												{% if not wo.isEliminated %}
-													<li class="list-group-item">
-														<table class="table table-striped">
-															<tr>
-																<td>lemma</td>
-																<td>{{wo.lemma}}</td>
-															</tr>
-															<tr>
-																<td>morph</td>
-																<td>{{wo.morph}}</td>
-															</tr>
-															<!-- <tr>
-																<td>aux_info</td>
-																<td>{{wo.aux_info}}</td>
-															</tr>		
-															<tr>
-																<td>color_class</td>
-																<td>{{wo.color_class}}</td>
-															</tr> -->
-														</table>
-														{% if not wo.isSelected %}
-															<a class="btn btn-success" href="{% url 'select_wordoption' wo.id %}">Select</a>
-															<a class="btn btn-danger" href="{% url 'eliminate_wordoption' wo.id %}">Eliminate</a>
-														{% endif %}
-													</li>
-												{% endif %}
-											{% endfor %}
-										</ul>
-									</div>
-								</div>
+								{% include "word_panel.html" with word=word_current %}
 							</div>
 							<div class="col-md-4">
 								<div class="panel panel-primary">
@@ -222,58 +109,7 @@
 									</div> -->
 									<div class="panel-footer">
 										{% for c in word_childs %}
-											<div class="panel panel-primary">
-												<div class="panel-heading">
-													<div class="row">
-														<div class="col-md-8">
-															<h3 class="panel-title">Word : 
-																<a href="{% url 'change_word' c.id %}">{{c.text}}</a>
-															</h3>
-														</div>
-														<div class="col-md-4">
-															<a class="btn btn-info btn-sm" href="{% url 'undo_selections' c.id %}">Reset</a>
-														</div>
-													</div>
-												</div>
-												<div class="panel-body">
-													<ul class="list-group">
-														<li class="list-group-item">POS : {{c.POS}}</li>
-														<li class="list-group-item">dep : {{c.dep}}</li>
-													</ul>
-												</div>
-												<div class="panel-footer">
-													<ul class="list-group">
-														{% for wo in c.wordoption_set.all %}
-															{% if not wo.isEliminated %}
-																<li class="list-group-item">
-																	<table class="table table-striped">
-																		<tr>
-																			<td>lemma</td>
-																			<td>{{wo.lemma}}</td>
-																		</tr>
-																		<tr>
-																			<td>morph</td>
-																			<td>{{wo.morph}}</td>
-																		</tr>
-																		<!-- <tr>
-																			<td>aux_info</td>
-																			<td>{{wo.aux_info}}</td>
-																		</tr>		
-																		<tr>
-																			<td>color_class</td>
-																			<td>{{wo.color_class}}</td>
-																		</tr> -->
-																	</table>
-																	{% if not wo.isSelected %}
-																		<a class="btn btn-success" href="{% url 'select_wordoption' wo.id %}">Select</a>
-																		<a class="btn btn-danger" href="{% url 'eliminate_wordoption' wo.id %}">Eliminate</a>
-																	{% endif %}
-																</li>
-															{% endif %}
-														{% endfor %}
-													</ul>
-												</div>
-											</div>
+											{% include "word_panel.html" with word=c %}
 										{% endfor %}
 									</div>
 								</div>
