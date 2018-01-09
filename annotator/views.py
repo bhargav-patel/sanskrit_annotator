@@ -112,3 +112,12 @@ def reset_session(request):
 	for key in list(request.session.keys()):
 		del request.session[key]
 	return redirect('index')
+
+def undo_selections(request,word_id):
+	opts = WordOption.objects.filter(word_id=word_id)
+	if opts.count()>1:
+		for o in opts:
+			o.isEliminated = False
+			o.isSelected = False
+			o.save()
+	return redirect('index')
