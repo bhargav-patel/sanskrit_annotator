@@ -103,9 +103,14 @@ def select_wordoption(request,wordoption_id):
 	return redirect('index')
 
 def eliminate_wordoption(request,wordoption_id):
+
 	wo = WordOption.objects.get(id=wordoption_id)
-	wo.isEliminated = True
-	wo.save()
+	
+	remainingOptsCount = WordOption.objects.filter(word_id=wo.word_id,isEliminated=False).count()
+	if remainingOptsCount>1:
+		wo.isEliminated = True
+		wo.save()
+
 	return redirect('index')
 
 def reset_session(request):
