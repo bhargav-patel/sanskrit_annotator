@@ -1,7 +1,7 @@
 {% load bootstrap3 %}
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title">Shortlist</h3>
+		<h3 class="panel-title">Shortlist Words</h3>
 	</div>
 	<div class="panel-body">
 		<form method="POST" class="post-form">
@@ -14,7 +14,7 @@
 		<ul class="list-group">
 			{% for word in words %}
 				<li class="list-group-item">
-					<a href="{% url 'change_word' word.id %}">{{word.text}}</a>
+					<a href="{% url 'change_word' word.id %}" title="POS : {{word.POS}} dep : {{word.dep}}">{{word.text}}</a>
 				</li>	    
 			{% endfor %}
 		</ul>

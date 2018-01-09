@@ -11,7 +11,7 @@
 			</div>
 			<div class="col-md-4">
 				{% if word %}
-					<a class="btn btn-info btn-sm" href="{% url 'undo_selections' word.id %}">Reset</a>
+					<a class="btn btn-info btn-sm" title="Undo all selections and eliminations for this word" href="{% url 'undo_selections' word.id %}">Reset</a>
 				{% endif %}
 			</div>
 		</div>	
@@ -51,8 +51,8 @@
 								</tr> -->
 							</table>
 							{% if not wo.isSelected %}
-								<a class="btn btn-success" href="{% url 'select_wordoption' wo.id %}">Select</a>
-								<a class="btn btn-danger" href="{% url 'eliminate_wordoption' wo.id %}">Eliminate</a>
+								<a class="btn btn-success" href="{% url 'select_wordoption' wo.id %}" title="Select option and eliminate others">Select</a>
+								<a class="btn btn-danger" href="{% url 'eliminate_wordoption' wo.id %}"" title="Eliminate option">Eliminate</a>
 							{% endif %}
 						</li>
 					{% endif %}

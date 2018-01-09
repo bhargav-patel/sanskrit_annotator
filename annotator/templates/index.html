@@ -37,7 +37,7 @@
 											{% if w.id == word_current.id %}
 												<u><a href="#">{{w.text}}</a></u>
 											{% else %}
-												<a href="{% url 'change_word' w.id %}">{{w.text}}</a>
+												<a href="{% url 'change_word' w.id %} " data-toggle="tooltip" title="POS : {{word_current.POS}} | dep : {{word_current.dep}}">{{w.text}}</a>
 											{% endif %}
 									{% endfor %}
 								</h3>
