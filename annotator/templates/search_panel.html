@@ -14,7 +14,8 @@
 		<ul class="list-group">
 			{% for word in words %}
 				<li class="list-group-item">
-					<a href="{% url 'change_word' word.id %}" title="POS : {{word.POS}} dep : {{word.dep}}">{{word.text}}</a>
+					<a href="{% url 'change_word' word.id %}" title="POS : {{word.POS}}
+dep : {{word.dep}}"><span class="text-nowrap">{{word.text}} ({{word.devnagari}})</span></a>
 				</li>	    
 			{% endfor %}
 		</ul>

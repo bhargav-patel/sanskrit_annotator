@@ -1,4 +1,5 @@
 from django.db import models
+from wxconv import WXC
 
 # Create your models here.
 
@@ -25,6 +26,10 @@ class Word(models.Model):
 
 	def __str__(self):
 		return str(self.sent.id) + "/ "+ str(self.id) + "/ "+self.text
+
+	def devnagari(self):
+		con = WXC(order='wx2utf')
+		return con.convert(self.text)
 
 	class Meta:
 		unique_together = (("sent", "wordID"),)

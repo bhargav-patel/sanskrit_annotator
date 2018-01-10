@@ -23,7 +23,16 @@
 							<div class="col-md-4">
 								<h4 class="panel-title">Sentence {{word_current.sent_id}} </h4>
 							</div>
-							<div class="col-md-4"></div>
+							<div class="col-md-4">
+								<a class="btn btn-info btn-xs" href="{% url 'change_encoding' %} " title=" Change to {% if request.session.wx %}Devnagari{% else %}WX{% endif %} encoding
+								">
+									{% if request.session.wx %}
+										Devnagari
+									{% else %}
+										WX
+									{% endif %}
+								</a>
+							</div>
 							<div class="col-md-4">
 								<h3 class="panel-title">Status : {{numDone}} / {{numTotal}} Words</h3>
 							</div>
@@ -35,16 +44,25 @@
 								<h3>
 									{% for w in word_current.sent.word_set.all %}
 											{% if w.id == word_current.id %}
-												<u><a href="#">{{w.text}}</a></u>
-											{% else %}
-												<a href="{% url 'change_word' w.id %} " data-toggle="tooltip" title="POS : {{word_current.POS}} | dep : {{word_current.dep}}">{{w.text}}</a>
+												<u>
+											{% endif %}
+											<a href="{% url 'change_word' w.id %} " title="POS : {{w.POS}}
+dep : {{w.dep}}">
+												{% if request.session.wx %}
+													{{w.text}}
+												{% else %}
+													{{w.devnagari}}
+												{% endif %}
+											</a>
+											{% if w.id == word_current.id %}
+												</u>
 											{% endif %}
 									{% endfor %}
 								</h3>
 							</div>
 							<div class="col-md-2">
 								<h3>
-									<a class="btn btn-info btn-sm" target="_blank" href="http://sanskrit.inria.fr/cgi-bin/SKT/sktgraph?lex=SH&st=t&us=f&cp=t&text=
+									<a class="btn btn-info btn-xs" target="_blank" href="http://sanskrit.inria.fr/cgi-bin/SKT/sktgraph?lex=SH&st=t&us=f&cp=t&text=
 
 									{% for w in word_current.sent.word_set.all %}
 										{{w.text}}+
@@ -58,10 +76,10 @@
 					<div class="panel-footer">
 						<div class="row">
 							<div class="col-md-4">
-								{% include "word_panel.html" with word=word_parent %}
+								{% include "word_panel.html" with word=word_parent type="Parent" %}
 							</div>
 							<div class="col-md-4">
-								{% include "word_panel.html" with word=word_current %}
+								{% include "word_panel.html" with word=word_current type="Word" %}
 							</div>
 							<div class="col-md-4">
 								<div class="panel panel-primary">
@@ -89,7 +107,7 @@
 									</div> -->
 									<div class="panel-footer">
 										{% for c in word_childs %}
-											{% include "word_panel.html" with word=c %}
+											{% include "word_panel.html" with word=c type="Child" %}
 										{% endfor %}
 									</div>
 								</div>

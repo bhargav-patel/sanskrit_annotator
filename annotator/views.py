@@ -126,3 +126,12 @@ def undo_selections(request,word_id):
 			o.isSelected = False
 			o.save()
 	return redirect('index')
+
+def change_encoding(request):
+	wx = request.session.get('wx',None)
+	if wx:
+		del request.session['wx']
+	else:
+		request.session['wx'] = True
+		
+	return redirect('index')
