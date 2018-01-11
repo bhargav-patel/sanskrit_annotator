@@ -70,15 +70,20 @@ def index(request):
 	# currunt_word = 	130
 
 	currunt_word = request.session.get('currunt_word',None)
-	print(currunt_word)
-	if not currunt_word:
-		currunt_word = words.first().id
 
-	word_current = Word.objects.get(id=currunt_word)
-	word_childs = Word.objects.filter(sent_id=word_current.sent_id,head=word_current.wordID)
+	word_current = None
+	word_childs = None
 	word_parent = None
-	if word_current.head!=0:
-		word_parent = Word.objects.get(sent_id=word_current.sent_id,wordID=word_current.head)
+
+	if words.count()>0:
+		if not currunt_word:
+			currunt_word = words.first().id
+
+		word_current = Word.objects.get(id=currunt_word)
+		word_childs = Word.objects.filter(sent_id=word_current.sent_id,head=word_current.wordID)
+		word_parent = None
+		if word_current.head!=0:
+			word_parent = Word.objects.get(sent_id=word_current.sent_id,wordID=word_current.head)
 
 	numDone = Word.objects.filter(wordoption__isSelected=True).distinct().count()
 	numTotal = Word.objects.count()
