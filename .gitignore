@@ -89,5 +89,3 @@ local_settings.py
 db.sqlite3
 
 data/
-import_data.py
-select_single_options.py
