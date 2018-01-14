@@ -11,6 +11,15 @@
 	    </form>
 	</div>
 	<div class="panel-footer">
+		<a class="btn btn-info btn-xs" href="{% url 'change_all' %} " title=" View {% if request.session.all %}10{% else %}all{% endif %} words
+								">
+			{% if request.session.all %}
+				Show only 10 word
+			{% else %}
+				Show All words
+			{% endif %}
+		</a>
+
 		<ul class="list-group">
 			{% for word in words %}
 				<li class="list-group-item">

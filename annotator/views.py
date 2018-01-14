@@ -88,6 +88,10 @@ def index(request):
 	numDone = Word.objects.filter(wordoption__isSelected=True).distinct().count()
 	numTotal = Word.objects.count()
 
+	is_all_selected = request.session.get('all',None)
+	if not is_all_selected:
+		words = words[:10]
+
 	context = {"form":form, "words":words,'word_current':word_current,'word_childs':word_childs,'word_parent':word_parent,'numDone':numDone,'numTotal':numTotal}
 	return render(request, 'index.html', context)
 
@@ -138,5 +142,14 @@ def change_encoding(request):
 		del request.session['wx']
 	else:
 		request.session['wx'] = True
+		
+	return redirect('index')
+
+def change_all(request):
+	is_all_selected = request.session.get('all',None)
+	if is_all_selected:
+		del request.session['all']
+	else:
+		request.session['all'] = True
 		
 	return redirect('index')
