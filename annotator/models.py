@@ -48,7 +48,7 @@ class WordOption(models.Model):
 	wordlength = models.IntegerField(default=0)
 	aux_info = models.CharField(max_length=100)
 	sandhi_indexs = models.CharField(max_length=100)
-	sandhi_words = models.CharField(max_length=100)
+	sandhi_words = models.CharField(max_length=300)
 	isEliminated = models.BooleanField(default=False)
 	isSelected = models.BooleanField(default=False)
 
