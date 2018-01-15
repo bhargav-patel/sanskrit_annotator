@@ -1,9 +1,12 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
+from django.contrib.auth.decorators import login_required
 
 from .forms import SearchForm
 from .models import Sentence,Word,WordOption
 # Create your views here.
+
+@login_required
 def index(request):
 
 	words = None
@@ -102,10 +105,12 @@ def index(request):
 	context = {"form":form, "words":words,'word_current':word_current,'word_childs':word_childs,'word_parent':word_parent,'numDone':numDone,'numTotal':numTotal}
 	return render(request, 'index.html', context)
 
+@login_required
 def change_word(request,word_id):
 	request.session['currunt_word'] = word_id
 	return redirect('index')
 
+@login_required
 def select_wordoption(request,wordoption_id):
 	wo = WordOption.objects.get(id=wordoption_id)
 	wo.isSelected = True
@@ -118,6 +123,7 @@ def select_wordoption(request,wordoption_id):
 			s.save()
 	return redirect('index')
 
+@login_required
 def eliminate_wordoption(request,wordoption_id):
 
 	wo = WordOption.objects.get(id=wordoption_id)
@@ -129,11 +135,13 @@ def eliminate_wordoption(request,wordoption_id):
 
 	return redirect('index')
 
+@login_required
 def reset_session(request):
 	for key in list(request.session.keys()):
 		del request.session[key]
 	return redirect('index')
 
+@login_required
 def undo_selections(request,word_id):
 	opts = WordOption.objects.filter(word_id=word_id)
 	if opts.count()>1:
@@ -143,6 +151,7 @@ def undo_selections(request,word_id):
 			o.save()
 	return redirect('index')
 
+@login_required
 def change_encoding(request):
 	wx = request.session.get('wx',None)
 	if wx:
@@ -152,6 +161,7 @@ def change_encoding(request):
 		
 	return redirect('index')
 
+@login_required
 def change_all(request):
 	is_all_selected = request.session.get('all',None)
 	if is_all_selected:
