@@ -18,7 +18,8 @@ def index(request):
 			request.session['search_form_lemma'] = form.cleaned_data["lemma"]
 			request.session['search_form_morph'] = form.cleaned_data["morph"]
 			request.session['search_form_color_class'] = form.cleaned_data["color_class"]
-			request.session['search_form_level'] = form.cleaned_data["level"]
+			# request.session['search_form_level'] = form.cleaned_data["level"]
+			request.session['search_form_show_unresolved_words_only'] = form.cleaned_data["show_unresolved_words_only"]
 	else:
 		form = SearchForm(initial={
 									'sent_id' : request.session.get('search_form_sent_id',''),
@@ -28,7 +29,8 @@ def index(request):
 									'lemma' : request.session.get('search_form_lemma',''),
 									'morph' : request.session.get('search_form_morph',''),
 									'color_class' : request.session.get('search_form_color_class',''),
-									'level' : request.session.get('search_form_level','') 					,
+									# 'level' : request.session.get('search_form_level',''),
+									'show_unresolved_words_only' : request.session.get('search_form_show_unresolved_words_only',True),
 								})
 
 
@@ -39,9 +41,14 @@ def index(request):
 	lemma = request.session.get('search_form_lemma','')
 	morph = request.session.get('search_form_morph','')
 	color_class = request.session.get('search_form_color_class','')
-	level = request.session.get('search_form_level',None) 
+	# level = request.session.get('search_form_level',None) 
+	show_unresolved_words_only = request.session.get('search_form_show_unresolved_words_only',None),
+	print(show_unresolved_words_only)
+	
+	words = Word.objects.all()	
 
-	words = Word.objects.filter(wordoption__isEliminated=False,wordoption__isSelected=False).distinct()
+	if (show_unresolved_words_only is not None) and show_unresolved_words_only[0]:
+		words = words.filter(wordoption__isEliminated=False,wordoption__isSelected=False).distinct()
 
 	if sent_id is not None:
 		words = words.filter(sent_id=sent_id)
@@ -64,8 +71,8 @@ def index(request):
 	if color_class!="":
 		words = words.filter(wordoption__color_class__icontains=color_class).distinct()
 
-	if level is not None:
-		words = words.filter(wordoption__level=level).distinct()
+	# if level is not None:
+	# 	words = words.filter(wordoption__level=level).distinct()
 
 	# currunt_word = 	130
 

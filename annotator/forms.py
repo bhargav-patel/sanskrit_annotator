@@ -8,4 +8,5 @@ class SearchForm(forms.Form):
 	lemma = forms.CharField(max_length=100,required=False,help_text="Words with options having this lemma")
 	morph = forms.CharField(max_length=100,required=False,help_text="Words with options having this morph")
 	color_class = forms.CharField(max_length=100,required=False,help_text="Words with options having this color_class")
-	level = forms.IntegerField(required=False,help_text="Words with options having this level")
+	# level = forms.IntegerField(required=False,help_text="Words with options having this level")
+	show_unresolved_words_only = forms.BooleanField(required=False,initial=True,help_text="Unselect this to see all words.")
